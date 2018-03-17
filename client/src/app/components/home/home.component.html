@@ -1,0 +1,10 @@
+<div class = "jumbotron">
+	<h1>Foodrunner - The Food delivery App</h1>
+	<hr>
+	<h3>Satisfy your cravings</h3> 
+	<p>Experience a world of food, with your favorite restaurant at your fingertips.</p>
+
+	<a *ngIf = "!authenticationService.loggedIn()" [routerLink] = "['/login']" class ="btn btn-primary btn-lg">Login</a>
+	<a *ngIf = "!authenticationService.loggedIn()" [routerLink] = "['/register']" class ="btn btn-primary btn-lg">Register</a>
+	
+</div>

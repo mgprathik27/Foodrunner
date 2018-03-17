@@ -11,7 +11,7 @@ router.get("/",(req,res)=>{
 router.get("/:uid",(req,res)=>{
 	console.log("trying to get cart data");
 	User.findById(req.params.uid,(err,user)=>{
-		Cart.findById(user.cart).populate("foods").exec((err,carts)=>{
+		Cart.findById(user.cart).populate("foods.food").exec((err,carts)=>{
 			console.log(carts+err);
 			res.json(carts);
 		});							
@@ -32,7 +32,7 @@ router.post("/:uid/:fid",(req,res,next)=>{
 				let newCart = new Cart({
 					email: user.email.toLowerCase(),
 					totalAmt: food.price,
-					foods :[fid]
+					foods :[{food:fid, quantity: 1}]
 				});
 
 				newCart.save((err,resp)=>{
@@ -45,7 +45,6 @@ router.post("/:uid/:fid",(req,res,next)=>{
 						if (err){
 							console.log("something went wrong");
 							res.json({ success: false, message: 'Could not add to cart'  + err });
-
 						}else{
 							res.json({ success: true, message: 'Added successfully to cart' });
 						}
@@ -53,20 +52,43 @@ router.post("/:uid/:fid",(req,res,next)=>{
 				});
 			}else{
 				var cartid = user.cart;
+				var flag = true;
 				console.log(cartid);
 				Cart.findById(cartid,(err,cart)=>{
 					console.log(cart);
 					cart.totalAmt = cart.totalAmt + food.price ;
-					cart.foods.push(food._id);
-					cart.save((err,resp)=>{
-						if (err){
-							console.log("something went wrong");
-						res.json({ success: false, message: 'Could not add to cart'  + err});
+					cart.foods.forEach((food, idx,foods)=>{
+						console.log(idx);
+						if(food.food == fid){
+							flag = false;
+							console.log("incrementing");
 
-						}else{
-							res.json({ success: true, message: 'Added successfully to cart' });
-						}						
+							food.quantity = food.quantity +1;
+							cart.save((err,resp)=>{
+								if (err){
+									console.log("something went wrong");
+								res.json({ success: false, message: 'Could not add to cart'  + err});
+
+								}else{
+									res.json({ success: true, message: 'Added successfully to cart' });
+								}						
+							});							
+						}else
+						if(idx == foods.length-1 && flag == true){
+							console.log("pushing");
+							cart.foods.push({food: fid,quantity : 1});
+							cart.save((err,resp)=>{
+								if (err){
+									console.log("something went wrong");
+								res.json({ success: false, message: 'Could not add to cart'  + err});
+
+								}else{
+									res.json({ success: true, message: 'Added successfully to cart' });
+								}						
+							})							
+						}
 					})
+
 				})
 
 			}
@@ -74,49 +96,34 @@ router.post("/:uid/:fid",(req,res,next)=>{
 	});		
 })
 
-router.delete("/:uid/:fid",(req,res,next)=>{
+router.delete("/:uid",(req,res,next)=>{
 	var uid = req.params.uid;
-	var fid = req.params.fid;
+	User.findByIdAndUpdate(uid,{$set : {cart : null}},{new : true},(err,resp)=>{
+		if (err){
+				console.log("something went wrong "+err);
+			res.json({ success: false, message: 'Could not delete'  + err});
+		}else{
+			res.json({ success: true, message: 'Successfully deleted cart' });
 
-	User.findById(uid,(err,user)=>{
-		var cid = user.cart;
-			Food.findById(fid,(err,food)=>{
-				Cart.findById(cid,(err,cart)=>{
-					var cartAmt = cart.totalAmt - food.price;
-					if (cartAmt ==0){
-						Cart.findByIdAndRemove(cid,(err,resp)=>{
-							if (err){
-								console.log("something went wrong "+err);
-								res.json({ success: false, message: 'Could not delete from cart'  + err});
-							}else{
-								User.findByIdAndUpdate(uid,{ $set: { cart : null }}, { new: true },(err,resp)=>{
-									if (err){
-											console.log("something went wrong "+err);
-										res.json({ success: false, message: 'Could not delete from cart'  + err});
-									}else{
-										res.json({ success: true, message: 'Successfully Deleted from cart' });
+		}
+	})
+})
 
-									}
-								})								
-							}							
-						})
-					}else{
-						Cart.findByIdAndUpdate(cid,{ $set: { totalAmt : cartAmt },$pull: { foods : fid }}, { new: true },(err,resp)=>{
-							if (err){
-									console.log("something went wrong "+err);
-								res.json({ success: false, message: 'Could not delete from cart'  + err});
-							}else{
-								res.json({ success: true, message: 'Successfully Deleted from cart' });
 
-							}
-						})	
-					}				
-				})
-							
+router.put("/:uid", (req,res,next)=>{
+	console.log("In put for cart");
+	console.log(req.body.foods);
+
+	Cart.findByIdAndUpdate(req.body._id,{ $set: { totalAmt : req.body.totalAmt , foods : req.body.foods}}, { new: true },(err,resp)=>{
+		if (err){
+				console.log("something went wrong "+err);
+			res.json({ success: false, message: 'Could not update'  + err});
+		}else{
+			res.json({ success: true, message: 'Successfully updated cart' });
+
+		}
 	})
 
 })
-})
-
 
 module.exports = router;

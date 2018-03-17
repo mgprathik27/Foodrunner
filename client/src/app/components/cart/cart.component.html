@@ -1,0 +1,48 @@
+<div *ngIf = "cart" class = "container">
+	<h3>Total Amount : ${{cart.totalAmt}}</h3>
+		<div class ="row">
+			<div class = "col-md-2">
+				Food
+			</div>
+			<div class = "col-md-2">
+				Type
+			</div>
+			<div class = "col-md-2">
+				Price
+			</div>	
+			<div class = "col-md-2">
+				Quantity
+			</div>			
+		</div>		
+		<br>
+	<div *ngFor = 'let food of cart.foods'>
+		<div class ="row">
+			<div class = "col-md-2">
+				{{food.food.name}}
+			</div>
+			<div class = "col-md-2">
+				{{food.food.type}}
+			</div>
+			<div class = "col-md-2">
+				${{food.food.price}}
+			</div>	
+			<div class = "col-md-2">
+				<input (blur) = "onChange(food._id)"  type="number" [(ngModel)] = "food.quantity" name="quantity"  min = 1 class ="quantity" oninput="validity.valid||(value='');" default =1 required>
+			</div>			
+			<div class = "col-md-2">
+				<input type="button" (click) = "deleteCart(food._id)" value="Delete" class ="btn btn-danger">
+			</div>	
+		</div>			
+	</div>
+</div>
+<div *ngIf = "!cart" class = "container">
+	<h3>Total Amount : $0</h3>
+	<h3>Cart Empty. Please Add items</h3>
+</div>
+
+<div *ngIf = "cart">
+	<a class = "btn btn-primary btn-lg" (click) = "confirmOrder()">Confirm Order</a>
+</div>
+<div *ngIf = "!cart">
+	<a class = "btn btn-primary btn-lg" [routerLink] = "['/menu']">Go to Menu</a>
+</div>

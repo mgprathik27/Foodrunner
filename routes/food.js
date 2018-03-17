@@ -21,7 +21,7 @@ router.get("/:type/:q",(req,res)=>{
 			res.json(foods);
 		});				
 	}else{
-		Food.find({type  : req.params.type.toLowerCase(), name: new RegExp(q, "i")},(err,foods)=>{
+		Food.find({type  : req.params.type.toLowerCase(), name: new RegExp(q, "i"), available : "Y"},(err,foods)=>{
 			console.log(foods + err);
 			res.json(foods);
 		});				
@@ -33,7 +33,8 @@ router.post("/",(req,res,next)=>{
 		name: req.body.name.toLowerCase(),
 		type: req.body.type.toLowerCase(),
 		price: req.body.price,
-		available: "Y"		
+		available: "Y"	,
+		image : req.body.image	
 	});
 	console.log("going to add "+newFood);
 	Food.findOne({name : req.body.name},(err,food)=>{

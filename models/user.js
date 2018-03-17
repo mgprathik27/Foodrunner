@@ -88,8 +88,10 @@ const passwordValidators = [
 
 // User Model Definition
 const userSchema = new Schema({
+  name: { type: String },
   email: { type: String, required: true, unique: true, lowercase: true, validate: emailValidators },
   password: { type: String, required: true, validate: passwordValidators },
+  type : { type: String},
   cart : 
       {
          type: mongoose.Schema.Types.ObjectId,
@@ -112,7 +114,7 @@ userSchema.pre('save', function(next) {
   // Ensure password is new or modified before applying encryption
   if (!this.isModified('password'))
     return next();
-
+  const saltRounds = 10;
   // Apply encryption
   bcrypt.hash(this.password, null, null, (err, hash) => {
     if (err) return next(err); // Ensure no errors

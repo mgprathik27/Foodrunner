@@ -1,0 +1,33 @@
+<form (submit) = fetchFoods()>
+	<div class = "form-group">
+		<input class ="form-control" type="text" name="q" placeholder="Search" [(ngModel)] = "q" >
+	</div>
+	<div class = "form-group">
+		<select [(ngModel)] = "type" name = "type" class ="form-control">
+		  <option value="all"></option>
+		  <option value="rice">Rice</option>
+		  <option value="bread">Bread</option>
+		  <option value="drink">Drinks</option>
+		  <option value="curry">Curry</option>
+		</select>
+	</div>
+	<div class = "form-group">
+		<input type="submit" name="submit" class = "form-control">
+	</div>
+</form>
+
+<div class="container">
+  <div class="row">
+	    <div class="col-lg-3 col-sm-6" *ngFor = 'let food of foods'>
+	    	<div class ="thumbnail">
+		      <img src="{{food.image}}">
+		      <div class="caption">
+			      <div>{{food.name}}</div>
+			      <div>{{food.type}}</div>
+			      <div>{{food.price}}</div>
+		      </div>
+		      <a (click) = "addToCart(food._id)" ><button>Add to Cart</button></a>
+	      </div>
+	    </div>
+  </div>
+</div>
