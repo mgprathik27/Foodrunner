@@ -1,3 +1,58 @@
 .thumbnail img{
 	width: 100%;
+    height:180px;
+    max-width: 190px;
+    border-radius: 15px;
+    margin:  0 auto;
+
+}
+.paging{
+  margin: auto;
+  width: 50%;
+}
+
+.caption-full{
+  text-transform: uppercase;
+}
+
+
+alert-dismissable .close,
+.alert-dismissible .close {
+  position: absolute;
+  top: -2px;
+  right: -21px;
+  color: inherit;
+}
+
+#flashMessages{
+	position: absolute;
+}
+
+div#flashMessages.flash-messages{
+		position: absolute;
+
+}
+
+.delete{
+  position: absolute;
+  left: 159px;
+  top: -3px;
+
+}
+.container{
+  padding: 0;
+}
+
+.addToCart{
+ position: absolute;
+  left: 15px;
+  top: 136px;
+  width: 100%;
+  max-width: 190px;
+  border-radius: 15px;
+  opacity: 0.9;
+}
+
+.addToCart:hover{
+  opacity: 1;
 }

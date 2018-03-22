@@ -5,10 +5,31 @@ var bodyParser = require("body-parser");
 var cors = require("cors");
 var path = require("path");
 var passport = require("passport");
+var multer = require("multer");
 
 var app = express();
+var router = express.Router();
 
 mongoose.connect(database.database);
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+var upload = multer({ dest: 'public/uploads/' })
+
+app.post('/upload', upload.single('image'), function (req, res, next) {
+    console.log(req.file);
+    var resp = {filename: req.file.filename, message : "File uploaded successfully"};
+           return res.send(resp);
+     })
+
+app.get ('/upload/:name',(req,res)=>{
+    var dir = path.join(__dirname, 'public/uploads/'+req.params.name)
+    console.log("here for image " + dir);
+    res.sendFile(dir);
+})
 
 //on connection
 mongoose.connection.on("connected",()=>{

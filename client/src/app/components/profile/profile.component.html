@@ -5,5 +5,26 @@
 <br>
 <div>
 	<h2>Order History</h2>
+<div *ngIf = "history" class = "container">
+		<div class ="row">
+			<div class = "col-md-4">
+				Order ID
+			</div>
+			<div class = "col-md-4">
+				Total Amount
+			</div>
+		</div>		
+		<br>
+	<div *ngFor = 'let order of history'>
+		<div class ="row">
+			<div class = "col-md-4">
+				{{order._id}}
+			</div>
+			<div class = "col-md-4">
+				{{order.totalAmt}}
+			</div>
 
+		</div>			
+	</div>
+</div>
 </div>

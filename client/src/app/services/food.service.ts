@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import {Http, Headers, ResponseContentType} from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -20,8 +20,11 @@ export class FoodService {
   		.map(res =>res.json());  	  	
   }
 
-  addFood(food){
-
+  addNewItem(newItem){
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/api/food',newItem,{headers:headers})
+      .map(res =>res.json());  
   }
 
   addToCart(fid,uid){
@@ -29,6 +32,13 @@ export class FoodService {
   	headers.append('Content-Type', 'application/json');
   	return this.http.post('http://localhost:3000/api/cart/'+ uid +'/'+ fid,{headers:headers})
   		.map(res =>res.json());  	
+  }
+
+  deleteItem(fid){
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.delete('http://localhost:3000/api/food/'+ fid,{headers:headers})
+      .map(res =>res.json());    
   }
 
   getCart(uid){
@@ -61,8 +71,14 @@ export class FoodService {
   }  
 
   getHistory(uid){
+    console.log(uid);
     return this.http.get('http://localhost:3000/api/order/'+ uid)
       .map(res =>res.json());    
   }
 
+  fetchImage(name){
+    console.log(name);
+    return this.http.get('http://localhost:3000/uploads/'+ name,{ responseType: ResponseContentType.Blob })
+      .map((res) => res.blob())  
+  }
 }

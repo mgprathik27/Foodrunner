@@ -4,5 +4,5 @@ export class Food{
   type		: string;
   price		: number;
   available	: string;
-  image : string;
+  image : any;
 };

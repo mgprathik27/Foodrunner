@@ -17,17 +17,33 @@
 </form>
 
 <div class="container">
-  <div class="row">
-	    <div class="col-lg-3 col-sm-6" *ngFor = 'let food of foods'>
-	    	<div class ="thumbnail">
-		      <img src="{{food.image}}">
-		      <div class="caption">
-			      <div>{{food.name}}</div>
-			      <div>{{food.type}}</div>
-			      <div>{{food.price}}</div>
+  <div  class="row " >
+	    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor = 'let food of curPagefoods'>
+	    	<div *ngIf = "food.image" class ="thumbnail">
+
+		      <!-- <img [src]="food.image"> -->
+        	<img [src]="food.image | safeHtml" />
+        	<a *ngIf = "globals.admin" (click) = "deleteItem(food._id)" class = "delete btn btn-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+        	 </a>
+        	<a (click) = "addToCart(food._id)" class ="addToCart btn btn-primary"><i class="fa fa-cart-plus fa-2x"></i></a>
+
+		      <div class="caption-full well">
+		      	<div class = "pull-right">${{food.price}}</div>
+   		        <div>{{food.name}}</div>
+			    <div>{{food.type}}</div>
 		      </div>
-		      <a (click) = "addToCart(food._id)" ><button>Add to Cart</button></a>
 	      </div>
 	    </div>
   </div>
+    <div *ngIf = "!foods" class="row " >
+    	<h4>No search results</h4>
+  </div>
 </div>
+
+
+
+<div class ="paging">
+  <ul class="pagination">
+  </ul>
+</div>
+

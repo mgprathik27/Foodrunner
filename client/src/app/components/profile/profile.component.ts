@@ -14,6 +14,7 @@ import {Router} from '@angular/router'
 export class ProfileComponent implements OnInit {
 	user : Object;
   uid : string;
+  history : Object;
   constructor(private authenticationService : AuthenticationService,
           private foodservice : FoodService,
   				private flashMessages : FlashMessagesService,
@@ -24,6 +25,10 @@ export class ProfileComponent implements OnInit {
   	this.authenticationService.getProfile().subscribe(user =>{
       this.uid = user.user._id;
   		this.user = user.user;
+      this.foodservice.getHistory(this.uid).subscribe(history =>{
+        this.history = history;
+        console.log(history);
+    })      
   	},
   	err =>{
   		console.log("not looged in "+err);
@@ -31,9 +36,6 @@ export class ProfileComponent implements OnInit {
       this.router.navigate(['']);
   	})
 
-    this.foodservice.getHistory(this.uid).subscribe(history =>{
-
-    })
 
   }
 

@@ -2,14 +2,16 @@ import { Injectable } from '@angular/core';
 import {Http, Headers} from '@angular/http';
 //import {Contact} from './contact';
 import 'rxjs/add/operator/map';
-import {tokenNotExpired} from 'angular2-jwt'
+import {tokenNotExpired} from 'angular2-jwt';
+import { Globals } from '../global';
+
 
 @Injectable()
 export class AuthenticationService {
 
   authToken : any;
   user : any;
-  constructor(private http: Http) { }
+  constructor(private http: Http, private globals : Globals) { }
 
   login(userInfo){
   	var headers = new Headers();
@@ -31,12 +33,19 @@ export class AuthenticationService {
    localStorage.setItem('user',JSON.stringify(user));
   	this.authToken = token;
   	this.user = user;
+    if(user.type == "A"){
+      this.globals.admin = true;
+    }
+    else{
+      this.globals.admin = false;
+    }    
   }
 
   logout(){
   	this.authToken = null;
   	this.user = null;
   	localStorage.clear();
+    this.globals.admin = null;
   }
 
   getProfile(){
@@ -56,4 +65,5 @@ export class AuthenticationService {
   loggedIn(){
     return tokenNotExpired("id_token");
   }
+
 }

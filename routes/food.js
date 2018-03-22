@@ -7,7 +7,7 @@ router.get("/",(req,res)=>{
 });
 
 router.get("/:type/:q",(req,res)=>{
-	console.log("trying to get foods data");
+	console.log("trying to get foods data for type "+ req.params.type+ " q " + req.params.q);
 	var q;
 	if(req.params.q=="all"){
 		q="";
@@ -16,13 +16,12 @@ router.get("/:type/:q",(req,res)=>{
 	}
 
 	if(req.params.type == "all"){
-		Food.find({name: new RegExp(q, "i")},(err,foods)=>{
+		Food.find({name: new RegExp(q, "i"), available : "Y"},(err,foods)=>{
 			console.log(foods+err);
 			res.json(foods);
 		});				
 	}else{
 		Food.find({type  : req.params.type.toLowerCase(), name: new RegExp(q, "i"), available : "Y"},(err,foods)=>{
-			console.log(foods + err);
 			res.json(foods);
 		});				
 	}
@@ -74,6 +73,7 @@ router.delete("/:fid",(req,res,next)=>{
 				console.log("something went wrong "+err);
 			res.json({ success: false, message: 'Could not delete food'  + err});
 		}else{
+			console.log("Successfully Deleted food");
 			res.json({ success: true, message: 'Successfully Deleted food' });
 
 		}

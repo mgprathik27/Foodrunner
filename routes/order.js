@@ -15,16 +15,18 @@ router.get("/:uid",(req,res)=>{
 	User.findById(req.params.uid,(err,user)=>{
 		user.order.forEach((order,idx)=>{
 			Order.findById(order).populate("foods").exec((err,orders)=>{
-				prevOrders.push(orders);
+				if (prevOrders.push(orders)){
 				console.log(idx);
-				if(idx+1 === user.order.length){
+				if(prevOrders.length === user.order.length){
 					res.json(prevOrders);
 				}
+			}
 				
 			});	
 		});
 	})	
 });
+
 
 router.post("/:uid",(req,res,next)=>{
 

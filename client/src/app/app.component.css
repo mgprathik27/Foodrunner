@@ -1,0 +1,20 @@
+/*alert-dismissable .close,
+.alert-dismissible .close {
+  position: absolute;
+  top: -2px;
+  right: -21px;
+  color: inherit;
+}
+
+#flashMessages{
+	position: absolute;
+}
+
+div#flashMessages.flash-messages{
+		position: absolute;
+}
+
+
+router-outlet{
+	position: fixed;
+}*/

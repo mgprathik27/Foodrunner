@@ -55,7 +55,7 @@ router.post("/register",(req,res,next)=>{
 		name : req.body.name,
 		email: req.body.email,
 		password: req.body.password,
-		type : "N"
+		type : req.body.type
 	});
 	User.findOne({email : req.body.email},(err,user)=>{
 		if(user == null){
@@ -77,7 +77,6 @@ router.post("/register",(req,res,next)=>{
 })
 
 router.get("/profile",passport.authenticate('jwt',{session:false}) ,(req,res,next) =>{
-	console.log(req.user);
 	res.json({user: req.user});
 })
 module.exports = router;
