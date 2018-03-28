@@ -20,6 +20,13 @@ export class FoodService {
   		.map(res =>res.json());  	  	
   }
 
+  getAvailableFood(fid){
+    var url = 'http://localhost:3000/api/food/'+fid;
+    console.log(url);
+    return this.http.get(url)
+      .map(res =>res.json());        
+  }  
+
   addNewItem(newItem){
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');

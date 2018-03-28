@@ -5,11 +5,15 @@ import {FlashMessagesService} from 'angular2-flash-messages'
 import {Food} from '../../models/food';
 import { Globals } from '../../global';
 import * as $ from 'jquery';
+import {CartComponent} from '../cart/cart.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  styleUrls: ['./menu.component.css'],
+  providers : [CartComponent]
 })
 export class MenuComponent implements OnInit {
   q    :string;
@@ -22,12 +26,17 @@ export class MenuComponent implements OnInit {
   imageToShow: any;
   isImageLoading : boolean;
   totalPages : number;
+  modalRef: BsModalRef;
+  itemToBeDeleted : string;
+  dispfoods : Food[];
 
 
 
   constructor(private foodService: FoodService,
   				private authenticationService: AuthenticationService,
-  				private flashMessages : FlashMessagesService, private globals : Globals
+  				private flashMessages : FlashMessagesService, private globals : Globals,
+  				private cartComponent : CartComponent,
+  				private modalService : BsModalService
   				) { }
 
 	ngOnInit() {
@@ -37,7 +46,7 @@ export class MenuComponent implements OnInit {
 		console.log("here");
 	    this.fetchFoods();
 	    console.log(this.foods);
-
+	    this.cartComponent.ngOnInit();
 	  }
 
 	fetchFoods(){
@@ -49,12 +58,14 @@ export class MenuComponent implements OnInit {
 		  		console.log("q "+ this.q + " type "+ this.type);
 
 		  this.foodService.getFoods(this.type,q).subscribe(foods =>{
+		  	this.dispfoods = []];
 		  	this.foods = [];
 		  	console.log("before "+ foods);
 		  	console.log("before " +this.foods);
 		  	if(foods ==""){
 			  	console.log("inside "+ foods);
 			  	this.foods =null;
+			  	this.dispfoods = null;
 			  	$(".pagination").empty();
 
 
@@ -69,8 +80,13 @@ export class MenuComponent implements OnInit {
 				  available	: food.available,
 				  image : null
 				}  
-						  	console.log("after");
-
+						  	
+			  var imageid = "#"+ food._id;
+			  	console.log(imageid);
+		      $(imageid).click(function(){
+		      	console.log("hover on "+ food._id);
+		      	
+		      })
 		      	//this.isImageLoading = true;
 		      	this.foodService.fetchImage(food.image).subscribe(data => {
 			       let reader = new FileReader();
@@ -87,6 +103,8 @@ export class MenuComponent implements OnInit {
 		        console.log(error);
 		      });
 		      this.foods.push(newFood);	
+		      this.dispfoods.push(newFood);
+
 		      loopIdx = idx;
 		      var parent = this;
 			  if(loopIdx == foods.length-1){
@@ -127,16 +145,16 @@ export class MenuComponent implements OnInit {
 
 		this.curPage = pageNum;
 		this.curPagefoods = [];
-		for(var i = (pageNum-1)*this.pageLength; i<pageNum*this.pageLength && i<this.foods.length ;i++){
+		for(var i = (pageNum-1)*this.pageLength; i<pageNum*this.pageLength && i<this.dispfoods.length ;i++){
 			console.log("in loop "+i);
-			this.curPagefoods.push(this.foods[i]);
+			this.curPagefoods.push(this.dispfoods[i]);
 		}
 
 	}
 
 	buildPagination(){
 		var parent = this;
-		this.totalPages = Math.ceil(this.foods.length / this.pageLength);
+		this.totalPages = Math.ceil(this.dispfoods.length / this.pageLength);
 		$(".pagination").empty();
 		$(".pagination").append('<li _ngcontent-c2 class="page-item "><a _ngcontent-c2 class="page-link" id = "prevPage" (click) = "prevPage()">&laquo;</a></li>');
 			$("#prevPage").click(function(event){
@@ -184,9 +202,10 @@ export class MenuComponent implements OnInit {
 	  		this.foodService.addToCart(fid,this.uid).subscribe(info=>{
 	  			if (info.success){
 	  				console.log(info.message);
-	  				this.flashMessages.show("Successfully added to cart",{cssClass : "alert-success", timeout: 500});
+	  				this.flashMessages.show("Successfully added to cart",{cssClass : "alert-success", timeout: 1000});
+	  				this.cartComponent.ngOnInit();
 	  			}else{
-	  				this.flashMessages.show("Failed to insert to cart",{cssClass : "alert-danger", timeout: 500});
+	  				this.flashMessages.show("Failed to insert to cart",{cssClass : "alert-danger", timeout: 2500});
 
 	  			}
 	  		})
@@ -198,7 +217,8 @@ export class MenuComponent implements OnInit {
 	  	})		
 	}
 
-	deleteItem(fid){
+	deleteItem(template){
+		var fid = this.itemToBeDeleted;
 		this.foodService.deleteItem(fid).subscribe(info=>{
 			if (info.success){
 				console.log(info.message);
@@ -219,15 +239,49 @@ export class MenuComponent implements OnInit {
 				}else{
 					this.getFoodsPage(this.curPage);
 				}
-				this.buildPagination();
+				this.buildPagination();		
+				this.itemToBeDeleted = null;
+				this.modalRef.hide();			
 				this.flashMessages.show("Successfully deleted Item",{cssClass : "alert-success", timeout: 1000});
 			}else{
 				this.flashMessages.show("Failed to delete Item",{cssClass : "alert-danger", timeout: 1000});
 
 			}
 		})
-	}	
+	}		
 
+
+	mouseEnter(fid){
+		$("#"+fid).fadeTo( "fast" , 0.4, function() {
+		  });
+		$("#"+fid).next().show( "fast");
+
+
+	}
+
+	mouseLeave(fid){
+		$("#"+fid).fadeTo( "fast" , 1, function() {
+		});		
+		$("#"+fid).next().hide( "fast");
+
+	}
+
+	showDelete(template, foodId) {
+		this.itemToBeDeleted = foodId;
+		this.modalRef = this.modalService.show(template);
+	}  	
+
+	onqChange(){
+		if(this.type == null || this.type == "all")
+			this.dispfoods= this.foods.filter(x => (x.name.includes(this.q)));
+		else
+			this.dispfoods= this.foods.filter(x => (x.name.includes(this.q) && (x.type == this.type)));
+
+		this.getFoodsPage(1);
+		this.buildPagination();		
+
+
+	}
 
 
   }

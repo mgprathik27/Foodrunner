@@ -14,7 +14,7 @@ router.get("/:uid",(req,res)=>{
 	var prevOrders = [];
 	User.findById(req.params.uid,(err,user)=>{
 		user.order.forEach((order,idx)=>{
-			Order.findById(order).populate("foods").exec((err,orders)=>{
+			Order.findById(order).populate("foods.food").exec((err,orders)=>{
 				if (prevOrders.push(orders)){
 				console.log(idx);
 				if(prevOrders.length === user.order.length){
@@ -36,9 +36,10 @@ router.post("/:uid",(req,res,next)=>{
 			let newOrder = new Order({
 				email: cart.email,
 				totalAmt: cart.totalAmt,
-				foods : cart.foods
+				foods : cart.foods,
+				orderDate : new Date()
 			});
-
+			console.log(newOrder.orderDate);
 			newOrder.save((err,resp)=>{
 				if(err){
 					console.log("something went wrong");

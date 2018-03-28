@@ -1,49 +1,94 @@
-<form (submit) = fetchFoods()>
-	<div class = "form-group">
-		<input class ="form-control" type="text" name="q" placeholder="Search" [(ngModel)] = "q" >
+<div class="container mainbar" >
+
+<form >
+	<div class = "form-group query" >
+		<input class ="form-control" type="text" name="q" placeholder="Search" [(ngModel)] = "q" (input) = "onqChange()">
 	</div>
+
 	<div class = "form-group">
-		<select [(ngModel)] = "type" name = "type" class ="form-control">
-		  <option value="all"></option>
+		<select [(ngModel)] = "type" name = "type" class ="form-control" (change) = "onqChange()">
+		  <option value="all">All</option>
 		  <option value="rice">Rice</option>
 		  <option value="bread">Bread</option>
 		  <option value="drink">Drinks</option>
 		  <option value="curry">Curry</option>
-		</select>
-	</div>
-	<div class = "form-group">
-		<input type="submit" name="submit" class = "form-control">
+		</select>	
 	</div>
 </form>
 
-<div class="container">
-  <div  class="row " >
-	    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor = 'let food of curPagefoods'>
-	    	<div *ngIf = "food.image" class ="thumbnail">
+  <div  class="row " *ngIf = "foods">
+	<div class="col-lg-3 col-md-4 col-sm-6 cols"  *ngFor = 'let food of curPagefoods'>
+		<div class="thumbnail" *ngIf = "food.image">
+			<div (mouseenter) ="mouseEnter(food._id)"  (mouseleave) ="mouseLeave(food._id)" (click) = "addToCart(food._id)">
+	        	<img [src]="food.image | safeHtml" class = "img-thumbnail" id = {{food._id}}  />	
+	        	<i class="fa fa-plus fa-3x text-info" ></i>
+			</div>
 
-		      <!-- <img [src]="food.image"> -->
-        	<img [src]="food.image | safeHtml" />
-        	<a *ngIf = "globals.admin" (click) = "deleteItem(food._id)" class = "delete btn btn-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+        	<a *ngIf = "globals.admin"  (click) = "this.showDelete(template, food._id)" class = "delete btn btn-danger pull-right text-light"><i class="fa fa-trash fa-2x" aria-hidden="true" ></i>
         	 </a>
-        	<a (click) = "addToCart(food._id)" class ="addToCart btn btn-primary"><i class="fa fa-cart-plus fa-2x"></i></a>
+        	<div class="caption-full">
+			    <div class = "pull-right">${{food.price}}</div>
+   		        <div>{{food.name | uppercase}}</div>
+			    <div>{{food.type | uppercase}}</div>
+		    </div>
+		</div>
+	</div>
+  </div>
 
-		      <div class="caption-full well">
-		      	<div class = "pull-right">${{food.price}}</div>
-   		        <div>{{food.name}}</div>
-			    <div>{{food.type}}</div>
-		      </div>
+	<div *ngIf = "!foods" class="row " >
+		<h4>No search results</h4>
+	</div>
+	<div class ="paging">
+	  <ul class="pagination">
+	  </ul>
+	</div>  
+</div>
+<div class = "sidebar">
+	<h3>Cart </h3>
+	<div *ngIf = "cartComponent.cart" >
+		<button type="button" class="btn btn-primary btn-lg checkout" (click) = "cartComponent.confirmOrder()"  >Checkout - Pay ${{cartComponent.cart.totalAmt}}</button>		
+		<div class="list-group">
+		  <a class="list-group-item list-group-item-action flex-column align-items-start" *ngFor = 'let food of cartComponent.cart.foods'>
+		    <div class="d-flex w-100 justify-content-between">
+		      <h5 class="mb-1">{{food.food.name | uppercase}}</h5>
+		      <small class="text-muted">${{food.food.price}}</small>
+		    </div>
+		    <p class="mb-1 d-flex w-100 justify-content-between"><input (blur) = "cartComponent.onChange(food._id)"  type="number" [(ngModel)] = "food.quantity" name="quantity" id = "quantity"  min = 1 class ="quantity" oninput="validity.valid||(value='');" default =1 required> <input type="button"  (click) = "cartComponent.deleteCart(food._id)" class ="btn btn-danger" value="Delete"></p>
+		  </a>
+		</div>	
+		
+	</div>	
+	<div *ngIf = "!cartComponent.cart" >
+		No Items in Cart.
+	</div>
+
+
+</div>
+
+
+<ng-template #template>
+<div class="modal-md">
+  <div class="modal-dialog" role="document">
+
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	      	<h4 class="modal-title">Delete</h4>
+	        <button type="button" class="close" (click)="modalRef.hide()">&times;</button>
 	      </div>
+	      <div class="modal-body">
+	      	<h4 class="modal-title">Do you really want to Delete</h4>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" (click) = "deleteItem(template)" >Delete</button>
+	        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()" >Cancel</button>
+	      </div>	      
 	    </div>
-  </div>
-    <div *ngIf = "!foods" class="row " >
-    	<h4>No search results</h4>
-  </div>
-</div>
+
+	  </div>
+	</div>
+</ng-template>
 
 
 
-<div class ="paging">
-  <ul class="pagination">
-  </ul>
-</div>
 

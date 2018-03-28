@@ -18,3 +18,11 @@ div#flashMessages.flash-messages{
 router-outlet{
 	position: fixed;
 }*/
+
+flash-messages{
+  position: fixed;
+  left:  40%;
+  top:  9%;
+  z-index: 999;
+}
+

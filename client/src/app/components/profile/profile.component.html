@@ -1,30 +1,66 @@
-<div *ngIf="user">
+<div *ngIf="user" class = "container">
 	<h2 class = "page-header">Name : {{user.name}}</h2>
 	<h2 class = "page-header">Email : {{user.email}}</h2>
 </div>
 <br>
-<div>
+<div class = "container">
 	<h2>Order History</h2>
-<div *ngIf = "history" class = "container">
-		<div class ="row">
-			<div class = "col-md-4">
-				Order ID
-			</div>
-			<div class = "col-md-4">
-				Total Amount
-			</div>
-		</div>		
-		<br>
-	<div *ngFor = 'let order of history'>
-		<div class ="row">
-			<div class = "col-md-4">
-				{{order._id}}
-			</div>
-			<div class = "col-md-4">
-				{{order.totalAmt}}
-			</div>
-
-		</div>			
+	<div *ngIf = "history" >
+		<table class="table table-hover">
+			<thead>
+			<tr class = "bg-primary">
+			  <th scope="col">Order ID</th>
+			  <th scope="col">Order date</th>
+			  <th scope="col">Total Amount</th>
+			</tr>
+			</thead>
+			<tbody>
+			    <tr *ngFor = 'let order of history'  (click)="showOrders(template,order._id )">
+			      <th scope="row" >{{order._id}}</th>
+			      <td>{{order.orderDate | date}}</td>
+			      <td>{{order.totalAmt}}</td>
+			    </tr>
+			</tbody>
+		</table>
 	</div>
 </div>
-</div>
+
+<ng-template #template>
+<div class="modal-md">
+  <div class="modal-dialog" role="document">
+
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	      	<h4 class="modal-title">Order Details</h4>
+	        <button type="button" class="close" (click)="modalRef.hide()">&times;</button>
+	      </div>
+	      <div class="modal-body">
+			<h3>Total Amount : ${{selectedOrder.totalAmt}}</h3>
+			<h3>Date : {{selectedOrder.orderDate | date}}</h3>
+			<table class="table table-hover">
+				<thead>
+				<tr class = "bg-primary">
+				  <th scope="col">Item</th>
+				  <th scope="col">Type</th>
+				  <th scope="col">Price</th>
+				  <th scope="col">Quantity</th>
+				</tr>
+				</thead>
+				<tbody>
+				    <tr *ngFor = 'let food of selectedOrder.foods' >
+				      <th scope="row" >{{food.food.name | uppercase}}</th>
+				      <td>{{food.food.type}}</td>
+				      <td>${{food.food.price}}</td>
+				      <td>{{food.quantity}}</td>
+				    </tr>
+				</tbody>
+			</table>
+	      </div>
+	    </div>
+
+	  </div>
+	</div>
+</ng-template>
+
+

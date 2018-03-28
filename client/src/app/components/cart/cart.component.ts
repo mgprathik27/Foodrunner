@@ -64,28 +64,28 @@ export class CartComponent implements OnInit {
 		  			if (info.success){
 		  				console.log(info.message);
 
-		  				this.flashMessages.show("Successfully deleted from cart",{cssClass : "alert-success", timeout: 500});
+		  				this.flashMessages.show("Successfully deleted from cart",{cssClass : "alert-success", timeout: 1000});
 		  			}else{
-		  				this.flashMessages.show("Failed to delete from cart",{cssClass : "alert-danger", timeout: 500});
+		  				this.flashMessages.show("Failed to delete from cart",{cssClass : "alert-danger", timeout: 2500});
 		  			}  		
 	  		},
 		  	err =>{
 		  		console.log("Failed to delete from cart "+err);
-		  		this.flashMessages.show("Failed to delete cart",{cssClass : "alert-danger", timeout: 1000});
+		  		this.flashMessages.show("Failed to delete cart",{cssClass : "alert-danger", timeout: 2500});
 		  	})
 		}else{
 			this.foodService.updateCart(cart,this.uid).subscribe(info=>{
 		  			if (info.success){
 		  				console.log(info.message);
 
-		  				this.flashMessages.show("Successfully deleted from cart",{cssClass : "alert-success", timeout: 500});
+		  				this.flashMessages.show("Successfully deleted from cart",{cssClass : "alert-success", timeout: 1000});
 		  			}else{
-		  				this.flashMessages.show("Failed to delete from cart",{cssClass : "alert-danger", timeout: 500});
+		  				this.flashMessages.show("Failed to delete from cart",{cssClass : "alert-danger", timeout: 2500});
 		  			}  		
 	  		},
 		  	err =>{
 		  		console.log("Failed to delete from cart "+err);
-		  		this.flashMessages.show("Failed to delete cart",{cssClass : "alert-danger", timeout: 1000});
+		  		this.flashMessages.show("Failed to delete cart",{cssClass : "alert-danger", timeout: 2500});
 		  	})
 	  	}	
 	}
@@ -122,20 +122,35 @@ export class CartComponent implements OnInit {
 	}
 
 	confirmOrder(){
-			this.foodService.confirmOrder(this.uid).subscribe(info=>{
-		  			if (info.success){
-		  				console.log(info.message);
 
-		  				this.flashMessages.show("Ordered Successfully",{cssClass : "alert-success", timeout: 500});
-		  				this.router.navigate(['/menu']);
-		  			}else{
-		  				this.flashMessages.show("Failed to order",{cssClass : "alert-danger", timeout: 500});
-		  			}  		
-	  		},
-		  	err =>{
-		  		console.log("Failed to order "+err);
-		  		this.flashMessages.show("Failed to order",{cssClass : "alert-danger", timeout: 1000});
-		  	})		
+		var count=0;
+		this.cart.foods.forEach((foods)=>{
+			this.foodService.getAvailableFood(foods.food._id).subscribe(info=>{
+				if(info.success == false){
+		  			this.flashMessages.show(foods.food.name + " is not available anymore. Please delete it from cart",{cssClass : "alert-danger", timeout: 3000});
+		  			return false;
+				}else {
+					count++;
+					if(count == this.cart.foods.length){
+						console.log("adasd");
+						this.foodService.confirmOrder(this.uid).subscribe(info=>{
+					  			if (info.success){
+					  				console.log(info.message);
+					  				this.cart = null;
+					  				this.flashMessages.show("Ordered Successfully",{cssClass : "alert-success", timeout: 2500});
+					  				this.router.navigate(['/menu']);
+					  			}else{
+					  				this.flashMessages.show("Failed to order",{cssClass : "alert-danger", timeout: 2500});
+					  			}  		
+				  		},
+					  	err =>{
+					  		console.log("Failed to order "+err);
+					  		this.flashMessages.show("Failed to order",{cssClass : "alert-danger", timeout: 2500});
+					  	})						
+					}
+				}
+			})			
+		})
 	}
 
 }

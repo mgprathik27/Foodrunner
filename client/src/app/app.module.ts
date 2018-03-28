@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {RouterModule, Routes} from '@angular/router';
 import {FlashMessagesModule} from 'angular2-flash-messages'
-import { ImageUploadModule } from 'angular2-image-upload'
+import { ImageUploadModule } from 'angular2-image-upload';
+import { ModalModule } from 'ngx-bootstrap';
+
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -52,7 +54,8 @@ const appRoutes : Routes = [
     HttpModule,
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule.forRoot(),
-    ImageUploadModule.forRoot()
+    ImageUploadModule.forRoot(),
+    ModalModule.forRoot() 
   ],
   providers: [AuthGuard, AuthenticationService,FoodService,AdminGuard,Globals],
   bootstrap: [AppComponent]
