@@ -23,8 +23,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import {FoodService} from './services/food.service';
 import { FoodComponent } from './components/food/food.component';
 import { Globals } from './global';
-
-
+import { EditFoodComponent } from './components/edit-food/edit-food.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes : Routes = [
   {path: '', component : HomeComponent},
@@ -33,7 +33,8 @@ const appRoutes : Routes = [
   {path: 'profile', component : ProfileComponent, canActivate : [AuthGuard]},
   {path: 'menu', component : MenuComponent,  canActivate : [AuthGuard]},
   {path: 'cart', component : CartComponent,  canActivate : [AuthGuard]},
-  {path: 'food', component : FoodComponent,  canActivate : [AdminGuard]}
+  {path: 'food', component : FoodComponent,  canActivate : [AdminGuard]},
+  {path: 'food/:id', component : EditFoodComponent,  canActivate : [AdminGuard]}
 ]
 @NgModule({
   declarations: [
@@ -43,10 +44,12 @@ const appRoutes : Routes = [
     HomeComponent,
     ProfileComponent,
     NavbarComponent,
-    CartComponent,
+   CartComponent,
     MenuComponent,
     FoodComponent,
-    SafeHtml
+    SafeHtml,
+    EditFoodComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -55,7 +58,8 @@ const appRoutes : Routes = [
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule.forRoot(),
     ImageUploadModule.forRoot(),
-    ModalModule.forRoot() 
+    ModalModule.forRoot(),
+    NgbModule.forRoot()
   ],
   providers: [AuthGuard, AuthenticationService,FoodService,AdminGuard,Globals],
   bootstrap: [AppComponent]

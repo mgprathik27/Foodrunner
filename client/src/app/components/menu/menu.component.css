@@ -18,7 +18,7 @@ img{
 }
 
 .checkout{
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 @media (min-width: 1500px){
@@ -30,7 +30,6 @@ img{
 }
 }
 
-
 .fa-plus{
     position: absolute;
     left: 45%;
@@ -38,44 +37,55 @@ img{
     display: none;
 
 }
-/*
-.fa-trash{
-  width: 100%;
-}*/
+.btn-light{
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
 
 .delete{
   width: 50px;
   height: 50px;
   position: absolute;
-  right: 0;
+  right: 3%;
   top: 0;
+  border-radius : 15px;     
+}
+.delete i {
+  position: absolute;
+  top: 6px;
+  left: 7px;
 }
 
 
 html{
   max-height: 700px;
 }
-
+.mainbar{
+  margin-top: 15px;
+}
 
 @media (min-width: 1500px){
   .mainbar{
     float: left;
     position: absolute;
     display: block;
-    height: 85%;
+    height: 100%;
+    margin-left: 15px;
     /*overflow-x: hidden;*/
   }
   .sidebar{
     display: block;
-    position: absolute;
+    position: fixed;
     right: 1%;
     width: 22%;
-    height: 85%;
+    height: 93%;
     overflow-x: hidden;
-    background-color: #d7d1ff;
+    /*background-color: #d7d1ff;*/
     padding: 15px;
-    border-left : 2px solid white;
-  }  
+    border-left : 2px solid #3E3F3A;
+  } 
+
   
 }
 ::-webkit-scrollbar {
@@ -98,9 +108,14 @@ html,body {
 }
 
 .quantity{
-  width: 100px;
+  width: 50px;
 }
 
 flash-messages{
   position: fixed;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }

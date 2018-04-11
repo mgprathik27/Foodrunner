@@ -1,4 +1,6 @@
 <div class ="container">
+  <h1>Add New Item</h1>
+  <hr>
   <form (submit) = "addNewItem()" ngNativeValidate>
     <fieldset>
 	    <div class="form-group">
@@ -8,10 +10,16 @@
 		<div class = "form-group">
 			<label for="type">Item Type</label>
 			<select [(ngModel)] = "type" name = "type" class ="form-control" >
-			  <option value="rice">Rice</option>
-			  <option value="bread">Bread</option>
-			  <option value="drink">Drinks</option>
-			  <option value="curry">Curry</option>
+			  <option value="all">All</option>
+			  <option value="appetizer">Appetizers</option>
+			  <option value="soup">Soups and Salads</option>
+			  <option value="lunch">Lunch Specials</option>
+			  <option value="burger">Handcrafted Burgers</option>
+			  <option value="sandwich">Sandwiches and Tacos</option>
+			  <option value="pizza">Pizza</option>
+			  <option value="pasta">Pastas</option>
+			  <option value="desert">Deserts</option>
+			  <option value="beverage">Beverages</option>
 			</select>
 		</div>
 	    <div class="form-group">
@@ -20,7 +28,8 @@
 
 	    </div>
 	    <div class="form-group">
-	        <image-upload [url]="'http://localhost:3000/upload'" (uploadFinished)="onUploadFinished($event)"></image-upload>
+	        <image-upload [url]="'http://localhost:3000/upload'" (uploadFinished)="onUploadFinished($event)" buttonCaption="Select Image"
+  			dropBoxMessage="Drop Image Here" ></image-upload>
 	    </div>	    
       <button type="submit" class="btn btn-primary">Add food</button>
     </fieldset>

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary" >
+<nav class="navbar navbar-expand-lg navbar-dark bg-success" >
   <div class = "container">
     <a class="navbar-brand" [routerLink] = "['/']">Foodrunner</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,7 +18,7 @@
         </li>        
       </ul>
       <ul class="navbar-nav mr-auto navbar-center">
-        <li *ngIf = "authenticationService.loggedIn() && globals.admin" class="nav-item text-danger " [routerLinkActive] = "['active']" [routerLinkActiveOptions] = "{exact : true}">
+        <li *ngIf = "authenticationService.loggedIn() && globals.admin" class="nav-item text-primary " [routerLinkActive] = "['active']" [routerLinkActiveOptions] = "{exact : true}">
           <span id = "admin">Admin Mode</span> 
         </li>        
       </ul>

@@ -20,6 +20,13 @@ export class AuthenticationService {
   		.map(res =>res.json());
   }
 
+  sendmail(userInfo){
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/api/user/sendmail',userInfo,{headers:headers})
+      .map(res =>res.json());
+  }  
+
   register(userInfo){
   	var headers = new Headers();
     console.log(userInfo.name);

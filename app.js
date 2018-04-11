@@ -6,6 +6,7 @@ var cors = require("cors");
 var path = require("path");
 var passport = require("passport");
 var multer = require("multer");
+var nodemailer = require("nodemailer");
 
 var app = express();
 var router = express.Router();
@@ -55,7 +56,6 @@ app.get('/',(req,res)=>{
 });
 
 app.use("/api",route);
-
 
 app.listen(port,()=>{
 	console.log("Server started at port "+port);

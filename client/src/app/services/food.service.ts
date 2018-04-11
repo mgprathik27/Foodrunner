@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class FoodService {
+food : String;
 
   constructor(private http : Http) { }
 
@@ -47,6 +48,13 @@ export class FoodService {
     return this.http.delete('http://localhost:3000/api/food/'+ fid,{headers:headers})
       .map(res =>res.json());    
   }
+
+  editItem(editedItem){
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.put('http://localhost:3000/api/food/'+ editedItem._id,editedItem,{headers:headers})
+      .map(res =>res.json());    
+  }  
 
   getCart(uid){
   	return this.http.get('http://localhost:3000/api/cart/'+ uid)

@@ -7,6 +7,7 @@ import { Globals } from '../../global';
 import * as $ from 'jquery';
 import {CartComponent} from '../cart/cart.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import {Router} from '@angular/router'
 
 
 @Component({
@@ -36,13 +37,14 @@ export class MenuComponent implements OnInit {
   				private authenticationService: AuthenticationService,
   				private flashMessages : FlashMessagesService, private globals : Globals,
   				private cartComponent : CartComponent,
-  				private modalService : BsModalService
+  				private modalService : BsModalService,
+  				private router : Router
   				) { }
 
 	ngOnInit() {
 		this.type = null;
 		this.q = "";
-		this.pageLength =8;
+		this.pageLength =12;
 		console.log("here");
 	    this.fetchFoods();
 	    console.log(this.foods);
@@ -58,7 +60,7 @@ export class MenuComponent implements OnInit {
 		  		console.log("q "+ this.q + " type "+ this.type);
 
 		  this.foodService.getFoods(this.type,q).subscribe(foods =>{
-		  	this.dispfoods = []];
+		  	this.dispfoods = [];
 		  	this.foods = [];
 		  	console.log("before "+ foods);
 		  	console.log("before " +this.foods);
@@ -217,40 +219,6 @@ export class MenuComponent implements OnInit {
 	  	})		
 	}
 
-	deleteItem(template){
-		var fid = this.itemToBeDeleted;
-		this.foodService.deleteItem(fid).subscribe(info=>{
-			if (info.success){
-				console.log(info.message);
-				var foodIdx =null;
-				this.foods.forEach((food,idx) =>{
-					if(food._id == fid){
-						foodIdx = idx;
-					}
-				})
-				this.foods.splice(foodIdx,1);
-				console.log(this.foods);
-				this.totalPages = Math.ceil(this.foods.length / this.pageLength);
-				if(this.totalPages==0){
-					this.getFoodsPage(1);
-				}else
-				if ( this.curPage > this.totalPages){
-					this.getFoodsPage(this.curPage-1);
-				}else{
-					this.getFoodsPage(this.curPage);
-				}
-				this.buildPagination();		
-				this.itemToBeDeleted = null;
-				this.modalRef.hide();			
-				this.flashMessages.show("Successfully deleted Item",{cssClass : "alert-success", timeout: 1000});
-			}else{
-				this.flashMessages.show("Failed to delete Item",{cssClass : "alert-danger", timeout: 1000});
-
-			}
-		})
-	}		
-
-
 	mouseEnter(fid){
 		$("#"+fid).fadeTo( "fast" , 0.4, function() {
 		  });
@@ -266,16 +234,11 @@ export class MenuComponent implements OnInit {
 
 	}
 
-	showDelete(template, foodId) {
-		this.itemToBeDeleted = foodId;
-		this.modalRef = this.modalService.show(template);
-	}  	
-
 	onqChange(){
 		if(this.type == null || this.type == "all")
-			this.dispfoods= this.foods.filter(x => (x.name.includes(this.q)));
+			this.dispfoods= this.foods.filter(x => (x.name.includes(this.q.toLowerCase())));
 		else
-			this.dispfoods= this.foods.filter(x => (x.name.includes(this.q) && (x.type == this.type)));
+			this.dispfoods= this.foods.filter(x => (x.name.includes(this.q.toLowerCase()) && (x.type == this.type)));
 
 		this.getFoodsPage(1);
 		this.buildPagination();		
@@ -283,8 +246,7 @@ export class MenuComponent implements OnInit {
 
 	}
 
-
-  }
+}
 
 
 

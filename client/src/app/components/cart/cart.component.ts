@@ -49,7 +49,7 @@ export class CartComponent implements OnInit {
 			if(food._id == fid){
 				deleteIdx = idx;
 			}else{
-				newAmount = newAmount + (food.quantity*food.food.price);
+				newAmount = newAmount + this.precisionRound(food.quantity*food.food.price,2);
 				var foods  = {quantity : food.quantity, _id : food._id, food : food.food._id};
 				cartFoods.push(foods);				
 			}
@@ -65,6 +65,7 @@ export class CartComponent implements OnInit {
 		  				console.log(info.message);
 
 		  				this.flashMessages.show("Successfully deleted from cart",{cssClass : "alert-success", timeout: 1000});
+
 		  			}else{
 		  				this.flashMessages.show("Failed to delete from cart",{cssClass : "alert-danger", timeout: 2500});
 		  			}  		
@@ -90,6 +91,10 @@ export class CartComponent implements OnInit {
 	  	}	
 	}
 
+	precisionRound(number, precision) {
+	  var factor = Math.pow(10, precision);
+	  return Math.round(number * factor) / factor;
+	}
 
 
 	onChange(fid){
@@ -99,7 +104,10 @@ export class CartComponent implements OnInit {
 		this.cart.foods.forEach((food)=>{
 			if(food.quantity == null)
 				food.quantity = 1;
-			newAmount = newAmount + (food.quantity*food.food.price);
+			console.log("food.quantity "+this.precisionRound(food.quantity*food.food.price,2));
+			console.log("food.food.price "+food.food.price);
+			newAmount = newAmount + (this.precisionRound(food.quantity*food.food.price,2));
+			console.log("newAmount "+newAmount);
 			var foods  = {quantity : food.quantity, _id : food._id, food : food.food._id};
 			cartFoods.push(foods);
 		});
@@ -151,6 +159,25 @@ export class CartComponent implements OnInit {
 				}
 			})			
 		})
+	}
+
+	incQuantity(fid){
+		console.log(fid);
+		var idx = this.cart.foods.findIndex(x => x._id == fid);
+		console.log(idx);
+		this.cart.foods[idx].quantity++;
+		console.log(idx+this.cart.foods[idx].quantity);
+		this.onChange(fid)
+	}
+	decQuantity(fid){
+		var idx = this.cart.foods.findIndex(x => x._id == fid);
+		if(this.cart.foods[idx].quantity!=1){
+			this.cart.foods[idx].quantity--;
+		}else{
+			return;
+		}
+		console.log(idx+this.cart.foods[idx].quantity);
+		this.onChange(fid)
 	}
 
 }

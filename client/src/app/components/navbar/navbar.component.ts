@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
   }
 
   setGlobals(){
+    console.log("comes here");
     if(this.authenticationService.loggedIn()){
       if(this.globals.admin == undefined || this.globals.admin == null){
         this.authenticationService.getProfile().subscribe(user =>{
@@ -29,6 +30,7 @@ export class NavbarComponent implements OnInit {
           console.log(user.user.type);
           if(user.user.type == "A"){
             this.globals.admin = true;
+            this.onLogin();
           }
           else{
             this.globals.admin = false;
@@ -48,14 +50,14 @@ export class NavbarComponent implements OnInit {
     this.globals.admin = null;
   	this.authenticationService.logout();
   	this.flashMessages.show("Successfully Logged Out ",{cssClass : "alert-success", timeout : 3000});
-    $(".navbar").removeClass("bg-danger");
-    $(".navbar").addClass("bg-primary");
+    $(".navbar").removeClass("bg-primary");
+    $(".navbar").addClass("bg-success");
   	this.router.navigate(['/']);
   }
 
   onLogin(){
-      $(".navbar").removeClass("bg-primary");
-      $(".navbar").addClass("bg-danger");
+       $(".navbar").removeClass("bg-success");
+       $(".navbar").addClass("bg-primary");
   }
 
 }

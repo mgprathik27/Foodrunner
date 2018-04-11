@@ -1,0 +1,21 @@
+.modal-dialog{
+  margin: 0;
+}
+.container{
+	margin-top: 15px;
+}
+.foot{
+	margin-top: 5px;
+	margin-right: 15px;
+}
+h1{
+	display: inline;
+}
+.delete{
+	margin-left: 50px;
+	margin-bottom: 10px;
+}
+hr{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

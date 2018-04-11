@@ -1,5 +1,6 @@
 <div class="container mainbar" >
-
+<h1>Menu</h1>
+<hr>
 <form >
 	<div class = "form-group query" >
 		<input class ="form-control" type="text" name="q" placeholder="Search" [(ngModel)] = "q" (input) = "onqChange()">
@@ -8,10 +9,15 @@
 	<div class = "form-group">
 		<select [(ngModel)] = "type" name = "type" class ="form-control" (change) = "onqChange()">
 		  <option value="all">All</option>
-		  <option value="rice">Rice</option>
-		  <option value="bread">Bread</option>
-		  <option value="drink">Drinks</option>
-		  <option value="curry">Curry</option>
+		  <option value="appetizer">Appetizers</option>
+		  <option value="soup">Soups and Salads</option>
+		  <option value="lunch">Lunch Specials</option>
+		  <option value="burger">Handcrafted Burgers</option>
+		  <option value="sandwich">Sandwiches and Tacos</option>
+		  <option value="pizza">Pizza</option>
+		  <option value="pasta">Pastas</option>
+		  <option value="desert">Deserts</option>
+		  <option value="beverage">Beverages</option>
 		</select>	
 	</div>
 </form>
@@ -24,7 +30,7 @@
 	        	<i class="fa fa-plus fa-3x text-info" ></i>
 			</div>
 
-        	<a *ngIf = "globals.admin"  (click) = "this.showDelete(template, food._id)" class = "delete btn btn-danger pull-right text-light"><i class="fa fa-trash fa-2x" aria-hidden="true" ></i>
+        	<a *ngIf = "globals.admin"  class = "delete btn btn-primary pull-right text-light" [routerLink]="['/food', food._id]"><i class="fa fa-edit fa-3x" aria-hidden="true" ></i>
         	 </a>
         	<div class="caption-full">
 			    <div class = "pull-right">${{food.price}}</div>
@@ -43,51 +49,40 @@
 	  </ul>
 	</div>  
 </div>
-<div class = "sidebar">
-	<h3>Cart </h3>
-	<div *ngIf = "cartComponent.cart" >
-		<button type="button" class="btn btn-primary btn-lg checkout" (click) = "cartComponent.confirmOrder()"  >Checkout - Pay ${{cartComponent.cart.totalAmt}}</button>		
-		<div class="list-group">
-		  <a class="list-group-item list-group-item-action flex-column align-items-start" *ngFor = 'let food of cartComponent.cart.foods'>
-		    <div class="d-flex w-100 justify-content-between">
-		      <h5 class="mb-1">{{food.food.name | uppercase}}</h5>
-		      <small class="text-muted">${{food.food.price}}</small>
-		    </div>
-		    <p class="mb-1 d-flex w-100 justify-content-between"><input (blur) = "cartComponent.onChange(food._id)"  type="number" [(ngModel)] = "food.quantity" name="quantity" id = "quantity"  min = 1 class ="quantity" oninput="validity.valid||(value='');" default =1 required> <input type="button"  (click) = "cartComponent.deleteCart(food._id)" class ="btn btn-danger" value="Delete"></p>
-		  </a>
+<div class = "sidebarParent">
+	<div class = "sidebar">
+		<h3>Cart </h3>
+		<div *ngIf = "cartComponent.cart" >
+			<div *ngIf = "cartComponent.cart.foods.length" >
+				<button type="button" class="btn btn-success btn-lg checkout" (click) = "cartComponent.confirmOrder()"  >Checkout - Pay ${{cartComponent.cart.totalAmt}}</button>		
+				<div class="list-group">
+				  <div class="list-group-item  flex-column align-items-start " *ngFor = 'let food of cartComponent.cart.foods'>
+				    <div class="d-flex w-100 justify-content-between">
+				      <h6 >{{food.food.name | uppercase}}</h6>
+				      <small class="text-muted">${{food.food.price}}</small>
+				    </div>
+				    
+				    <p class="mb-1 d-flex w-100 justify-content-between">
+				    	<span>
+						<button class="btn btn-light" (click) = "cartComponent.incQuantity(food._id)" ><i class="fa fa-plus-square fa-2x text-info" aria-hidden="true" ></i></button>
+				    	<input (input) = "cartComponent.onChange(food._id)"  type="number" [(ngModel)] = "food.quantity" name="quantity" id = "quantity"  min = 1 class ="quantity" oninput="validity.valid||(value='');" default =1 required> 
+				    	<button class="btn btn-light" (click) = "cartComponent.decQuantity(food._id)"><i class="fa fa-minus-square fa-2x text-info" aria-hidden="true" ></i></button>
+				    	</span>
+				    	<input type="button"  (click) = "cartComponent.deleteCart(food._id)" class ="btn btn-primary" value="Remove"></p>
+				  </div>
+				</div>	
+			</div>
+			<div *ngIf = "!cartComponent.cart.foods.length" >
+					No Items in Cart.
+			</div>			
 		</div>	
-		
-	</div>	
-	<div *ngIf = "!cartComponent.cart" >
-		No Items in Cart.
+		<div *ngIf = "!cartComponent.cart" >
+					No Items in Cart.
+		</div>
 	</div>
-
-
 </div>
 
 
-<ng-template #template>
-<div class="modal-md">
-  <div class="modal-dialog" role="document">
-
-	    <!-- Modal content-->
-	    <div class="modal-content">
-	      <div class="modal-header">
-	      	<h4 class="modal-title">Delete</h4>
-	        <button type="button" class="close" (click)="modalRef.hide()">&times;</button>
-	      </div>
-	      <div class="modal-body">
-	      	<h4 class="modal-title">Do you really want to Delete</h4>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-primary" (click) = "deleteItem(template)" >Delete</button>
-	        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()" >Cancel</button>
-	      </div>	      
-	    </div>
-
-	  </div>
-	</div>
-</ng-template>
 
 
 

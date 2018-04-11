@@ -7,7 +7,6 @@ router.get("/",(req,res)=>{
 });
 
 router.get("/:fid",(req,res)=>{
-	console.log("asdasd");
 	Food.findById(req.params.fid,(err,food)=>{
 		if(food == null){
 			res.json({ success: false, food : req.params.fid, message: 'Food not available' });
@@ -15,9 +14,26 @@ router.get("/:fid",(req,res)=>{
 		if(food.available == "N"){
 			res.json({ success: false, food : req.params.fid, message: 'Food not available' });
 		}else {
-			res.json({ success: true, food : req.params.fid, message: 'Food available' });
+			res.json({ success: true, food : food, message: 'Food available' });
 		}
 	});				
+	
+});
+
+router.put("/:fid",(req,res)=>{
+	console.log("adsdaaqweqwe");
+	var fid = req.params.fid;
+	Food.findByIdAndUpdate(fid,{ $set: {name : req.body.name, type : req.body.type,
+		price : req.body.price, image : req.body.image }}, { new: true },(err,resp)=>{
+		if (err){
+				console.log("something went wrong "+err);
+			res.json({ success: false, message: 'Could not update food'  + err});
+		}else{
+			console.log("Successfully Updated food");
+			res.json({ success: true, message: 'Successfully update food' });
+
+		}
+	})			
 	
 });
 
@@ -44,12 +60,18 @@ router.get("/:type/:q",(req,res)=>{
 
 
 router.post("/",(req,res,next)=>{
+	var imagename = null;
+	if(req.body.image == null)
+		imagename = "7645c6effb10cb82cd152ee3c06b543d";
+	else
+		imagename = req.body.image;
+
 	let newFood = new Food({
 		name: req.body.name.toLowerCase(),
 		type: req.body.type.toLowerCase(),
 		price: req.body.price,
 		available: "Y"	,
-		image : req.body.image	
+		image : imagename	
 	});
 	console.log("going to add "+newFood);
 	Food.findOne({name : req.body.name},(err,food)=>{

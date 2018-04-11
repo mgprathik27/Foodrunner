@@ -21,8 +21,11 @@ router-outlet{
 
 flash-messages{
   position: fixed;
-  left:  40%;
+  left:  30%;
   top:  9%;
   z-index: 999;
+}
+.display{
+  padding-top:31px;
 }
 

@@ -27,7 +27,9 @@ export class FoodComponent implements OnInit {
   }
   addNewItem(){
   	  	  console.log("Here");
-
+    console.log(this.image) ;
+    if (this.image == undefined)      
+      this.image = null;
   	var newItem = {
   		name : this.name,
   		type : this.type,
