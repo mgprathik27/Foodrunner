@@ -34,7 +34,8 @@ const appRoutes : Routes = [
   {path: 'menu', component : MenuComponent,  canActivate : [AuthGuard]},
   {path: 'cart', component : CartComponent,  canActivate : [AuthGuard]},
   {path: 'food', component : FoodComponent,  canActivate : [AdminGuard]},
-  {path: 'food/:id', component : EditFoodComponent,  canActivate : [AdminGuard]}
+  {path: 'food/:id', component : EditFoodComponent,  canActivate : [AdminGuard]},
+  {path: '**', component : HomeComponent}
 ]
 @NgModule({
   declarations: [
