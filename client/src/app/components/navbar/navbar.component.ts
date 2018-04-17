@@ -12,6 +12,7 @@ import { Globals } from '../../global';
   providers : [AuthenticationService]
 })
 export class NavbarComponent implements OnInit {
+  isCollapsed : Boolean;
   constructor(private authenticationService : AuthenticationService,
   				private flashMessages : FlashMessagesService,
   				private router : Router, private globals : Globals
@@ -19,6 +20,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.setGlobals();
+    this.isCollapsed = true;
   }
 
   setGlobals(){
@@ -47,6 +49,7 @@ export class NavbarComponent implements OnInit {
   }
 
   onLogoutClick(){
+    this.onClickMenuItem()
     this.globals.admin = null;
   	this.authenticationService.logout();
   	this.flashMessages.show("Successfully Logged Out ",{cssClass : "alert-success", timeout : 3000});
@@ -58,6 +61,10 @@ export class NavbarComponent implements OnInit {
   onLogin(){
        $(".navbar").removeClass("bg-success");
        $(".navbar").addClass("bg-primary");
+  }
+
+  onClickMenuItem(){
+    this.isCollapsed = true;
   }
 
 }

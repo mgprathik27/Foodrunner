@@ -24,7 +24,7 @@ app.post('/upload', upload.single('image'), function (req, res, next) {
     console.log(req.file);
     var resp = {filename: req.file.filename, message : "File uploaded successfully"};
            return res.send(resp);
-     })
+})
 
 app.get ('/upload/:name',(req,res)=>{
     var dir = path.join(__dirname, 'public/uploads/'+req.params.name)

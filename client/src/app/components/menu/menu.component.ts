@@ -30,6 +30,7 @@ export class MenuComponent implements OnInit {
   modalRef: BsModalRef;
   itemToBeDeleted : string;
   dispfoods : Food[];
+  todayDate: Date;
 
 
 
@@ -244,6 +245,17 @@ export class MenuComponent implements OnInit {
 		this.buildPagination();		
 
 
+	}
+
+	showConfirmOrder(template){
+		console.log(this.cartComponent.cart);
+		this.todayDate = new Date();
+		this.modalRef = this.modalService.show(template);
+	}
+
+	confirmOrder(){
+		this.modalRef.hide();
+		this.cartComponent.confirmOrder();
 	}
 
 }

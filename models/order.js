@@ -15,7 +15,8 @@ const orderSchema = new Schema({
 				      quantity : { type : Number ,default : 0}
   				}
    			],
-   	orderDate : {type : Date, required:true}
+   	orderDate : {type : Date, required:true},
+   	orderStatus : {type : String}
 },{
   usePushEach: true
 });

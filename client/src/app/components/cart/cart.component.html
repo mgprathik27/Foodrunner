@@ -31,7 +31,7 @@
 			</tbody>
 		</table>
 		<div *ngIf = "cart.foods.length" class = "container">
-			<button type="button" class="btn btn-success btn-lg" (click) = "confirmOrder()">Confirm Order</button>
+			<button type="button" class="btn btn-success btn-lg" (click) = "showConfirmOrder(template)">Confirm Order</button>
 		</div>		
 	</div>
 	<div *ngIf = "!cart.foods.length" >
@@ -46,3 +46,45 @@
 	<h3>Cart Empty. Please Add items</h3>
 	<a class = "btn btn-success btn-lg" [routerLink] = "['/menu']">Go to Menu</a>
 </div>
+
+<ng-template #template>
+<div class="modal-md">
+  <div class="modal-dialog" role="document">
+
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	      	<h4 class="modal-title">Confirm Order</h4>
+	        <button type="button" class="close" (click)="modalRef.hide()">&times;</button>
+	      </div>
+	      <div class="modal-body">
+			<h3>Total Amount : ${{cart.totalAmt}}</h3>
+			<h3>Order Date : {{todayDate | date:'medium'}}</h3>
+			<table class="table table-hover">
+				<thead>
+				<tr class = "table-success">
+				  <th scope="col">Item</th>
+				  <th scope="col">Type</th>
+				  <th scope="col">Price</th>
+				  <th scope="col">Quantity</th>
+				</tr>
+				</thead>
+				<tbody>
+				    <tr *ngFor = 'let food of cart.foods' >
+				      <th scope="row" >{{food.food.name | uppercase}}</th>
+				      <td>{{food.food.type}}</td>
+				      <td>${{food.food.price}}</td>
+				      <td>{{food.quantity}}</td>
+				    </tr>
+				</tbody>
+			</table>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-success" (click) = "confirmOrder()" >Confirm and Pay</button>
+	        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()" >Cancel</button>
+	      </div>	      
+	    </div>
+
+	  </div>
+	</div>
+</ng-template>

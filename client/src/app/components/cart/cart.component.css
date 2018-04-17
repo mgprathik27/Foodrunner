@@ -15,3 +15,6 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
   border: 0;
 }
+.modal-dialog{
+  margin: 0;
+}

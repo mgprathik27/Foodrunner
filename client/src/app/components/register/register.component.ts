@@ -61,7 +61,7 @@ export class RegisterComponent implements OnInit {
           if(info.success == true){
              this.authenticationService.sendmail(userInfo).subscribe(info => {
                if(info.success == true){
-                  this.flashMessage.show("You are now registered. Verification mail has been sent to the email given. Please Verify.", {cssClass : 'alert-success', timeout : 3000})
+                  this.flashMessage.show("You are now registered. Verification mail has been sent to the email given. Please Verify.", {cssClass : 'alert-success', timeout : 4000})
 
                }
              })

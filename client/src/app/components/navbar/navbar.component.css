@@ -1,19 +1,52 @@
 #admin{
-	font-size: 1.3em;
+	font-size: 25px;
 	background-color: white;
 	padding: 5px;
 	border-radius: 20px;
-	font-weight: bold;
+	/*font-weight: bold;*/
+	font-family: 'Kaushan Script', cursive;
 }
-.container{
-	margin: 0;
-	width: 100%;
-	max-width: 1500px;
-}
+
 .navbar{
 	position: fixed;
 	width: 100%;
-	height: 50px;
 	z-index: 999;
+	top: -20px;
+    padding-top: 16px;
+    padding-bottom: 0px;
 }
+/*.navbarHeight{
+	height: 50px;
+}*/
+/*#logout:hover::after{
+	content: " Logout"
+}
+#profile:hover::after{
+	content: " Profile"
+}
+#cart:hover::after{
+	content: " Cart"
+}
+#login:hover::after{
+	content: " Login"
+}
+#register:hover::after{
+	content: " Register"
+}*/
+.menuItems{
+	text-align: center;	
+}
+i{
+	padding-right: 2px;
+}
+img{
+	padding-bottom: 2px;
+	padding-left: 4px;
+}
+
+li.nav-item.text-primary{
+	    padding-top: 11px;
+}
+
+
 

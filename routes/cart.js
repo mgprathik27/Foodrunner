@@ -18,7 +18,10 @@ router.get("/:uid",(req,res)=>{
 	})	
 			
 });
-
+function precisionRound(number, precision) {
+  var factor = Math.pow(10, precision);
+  return Math.round(number * factor) / factor;
+}
 router.post("/:uid/:fid",(req,res,next)=>{
 
 	User.findById(req.params.uid,(err,user)=>{
@@ -57,6 +60,8 @@ router.post("/:uid/:fid",(req,res,next)=>{
 				Cart.findById(cartid,(err,cart)=>{
 					console.log(cart);
 					cart.totalAmt = cart.totalAmt + food.price ;
+					cart.totalAmt = precisionRound(cart.totalAmt,2);
+					console.log(cart.totalAmt);
 					cart.foods.forEach((food, idx,foods)=>{
 						console.log(idx);
 						if(food.food == fid){

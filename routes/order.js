@@ -37,7 +37,8 @@ router.post("/:uid",(req,res,next)=>{
 				email: cart.email,
 				totalAmt: cart.totalAmt,
 				foods : cart.foods,
-				orderDate : new Date()
+				orderDate : new Date(),
+				orderStatus : "P"
 			});
 			console.log(newOrder.orderDate);
 			newOrder.save((err,resp)=>{

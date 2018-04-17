@@ -4,6 +4,7 @@ import {FlashMessagesService} from 'angular2-flash-messages';
 import {FoodService} from '../../services/food.service';
 import {Cart} from '../../models/cart';
 import {Router} from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 
 @Component({
@@ -14,10 +15,13 @@ import {Router} from '@angular/router';
 export class CartComponent implements OnInit {
  uid : string;
  cart : Cart;
+ todayDate : Date;
+ modalRef: BsModalRef;
 
   constructor(private foodService: FoodService,
   				private authenticationService: AuthenticationService,
   				private flashMessages : FlashMessagesService,
+  				private modalService : BsModalService,
   				private router : Router) { }
 
   ngOnInit() {
@@ -49,7 +53,7 @@ export class CartComponent implements OnInit {
 			if(food._id == fid){
 				deleteIdx = idx;
 			}else{
-				newAmount = newAmount + this.precisionRound(food.quantity*food.food.price,2);
+				newAmount = this.precisionRound(newAmount + this.precisionRound(food.quantity*food.food.price,2),2);
 				var foods  = {quantity : food.quantity, _id : food._id, food : food.food._id};
 				cartFoods.push(foods);				
 			}
@@ -100,13 +104,13 @@ export class CartComponent implements OnInit {
 	onChange(fid){
 		var newAmount =0;
 		var cartFoods = [];
-
+		console.log("here1");
 		this.cart.foods.forEach((food)=>{
 			if(food.quantity == null)
 				food.quantity = 1;
 			console.log("food.quantity "+this.precisionRound(food.quantity*food.food.price,2));
 			console.log("food.food.price "+food.food.price);
-			newAmount = newAmount + (this.precisionRound(food.quantity*food.food.price,2));
+			newAmount = this.precisionRound(newAmount + (this.precisionRound(food.quantity*food.food.price,2)),2);
 			console.log("newAmount "+newAmount);
 			var foods  = {quantity : food.quantity, _id : food._id, food : food.food._id};
 			cartFoods.push(foods);
@@ -145,6 +149,7 @@ export class CartComponent implements OnInit {
 					  			if (info.success){
 					  				console.log(info.message);
 					  				this.cart = null;
+					  				this.modalRef.hide();
 					  				this.flashMessages.show("Ordered Successfully",{cssClass : "alert-success", timeout: 2500});
 					  				this.router.navigate(['/menu']);
 					  			}else{
@@ -178,6 +183,11 @@ export class CartComponent implements OnInit {
 		}
 		console.log(idx+this.cart.foods[idx].quantity);
 		this.onChange(fid)
+	}
+
+	showConfirmOrder(template){
+		this.todayDate = new Date();
+		this.modalRef = this.modalService.show(template);
 	}
 
 }
